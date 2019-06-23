@@ -5,19 +5,38 @@ h1 {
 .container {
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: 50px 1fr 1fr 50px;
+  grid-template-columns: 50px 2fr 2fr 1fr 1fr 50px;
 }
 
-.column {
-  text-align: center;
+.second-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 2fr;
+  margin-top: 0.5rem;
+}
+
+.list {
+  grid-column: 2/4;
+  background-color: white;
+  border-radius: 6px;
+}
+
+.sc-bwzfXH {
+  padding: 0.2rem 0.6rem;
+  text-align: center
 }
 
 .column-left {
   grid-column: 2/3;
 }
 
-.results {
-  grid-column: 2/3;
+.middle-column {
+  grid-column: 3/4
+}
+
+.column-right {
+  grid-column: 4/5;
+  width: 50%;
+  align-items: center;
 }
 
 .displayed-results > ul {
@@ -30,3 +49,9 @@ h1 {
 .displayed-results > ul > li {
   padding: 0.5rem 1rem;
 }
+
+.react-calendar {
+  position: absolute;
+}
+
+

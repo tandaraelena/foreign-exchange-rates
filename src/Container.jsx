@@ -3,34 +3,26 @@ import axios from 'axios';
 import SelectTheDate from "./component/select-the-date";
 import SelectTheCurrency from "./component/select-the-currency";
 import styled from "styled-components"
+import ControlledButtons from "./component/controllButtons/controlled-buttons";
 
-const StyledSelectedCurrency = styled.div`
-  grid-column: 2/3;
-`;
-
-const StyledCurrencyRate = styled.div`
-  grid-column: 3/4;
-`;
+const StyledList = styled.div`
+  &:hover {
+    background-color: #E9E9E7;
+    cursor: pointer;
+  }
+  `;
 
 export default class Container extends Component {
   state = {
     data: {},
     currencies: ["EUR", "USD", "GBP", "CAD", "AUD"],
-    base: "USD",
-    displayedCurrencies: [
-      "Euro",
-      "US Dollar",
-      "British Pound",
-      "Canadian Dollar",
-      "Australian Dollar"
-    ],
+    base: "EUR",
     date: new Date(),
     selectedDate: "",
-    results: "",
     showCalendar: false
   };
 
-  getAPIData() {
+  getAPIData = () => {
     const { selectedDate, base } = this.state;
     if (selectedDate && base) {
       // I want to get the data from exchange rates API
@@ -52,7 +44,7 @@ export default class Container extends Component {
         return state
       },
       () => {
-        this.getAPIData();
+        // this.getAPIData();
       }
     );
     this.toggleShowCalendar();
@@ -74,10 +66,14 @@ export default class Container extends Component {
       },
       //  2
       () => {
-        this.getAPIData();
+        // this.getAPIData();
       }
 
     );
+  }
+
+  handleCancelButton = () => {
+    this.setState({ selectedDate: ""})
   }
 
   renderData = () => {
@@ -85,17 +81,17 @@ export default class Container extends Component {
     console.log(data)
     return Object.keys(data.rates && data.rates[selectedDate] || {}).map( item => {
       return [
-        <StyledSelectedCurrency>
-          {item}
-        </StyledSelectedCurrency>,
-        <StyledCurrencyRate>{data.rates[selectedDate][item]}</StyledCurrencyRate>
+        <StyledList >
+          {item} {":"} {data.rates[selectedDate][item]}
+        </StyledList>
       ]
     })
   }
 
   render() {
 
-    const { currencies, base, date, results, selectedDate, showCalendar } = this.state;
+    const { currencies, base, date, selectedDate, showCalendar } = this.state;
+
     const selectTheDateProps = { 
       selectedDate,
       showCalendar,
@@ -103,19 +99,30 @@ export default class Container extends Component {
       toggleShowCalendar: this.toggleShowCalendar,
       handleChangeCalendar: this.handleChangeCalendar
     } 
+
     const selectedCurrenciesProps = { base, currencies, handleCurrencyChange: this.handleCurrencyChange }
+
+    const selectedControlledButtonsProps = { 
+      handleCancelButton: this.handleCancelButton, 
+      renderData: this.getAPIData 
+    }
 
     return (
       <div>
-        <div className="container">
-          <div className="column-left">
-            <SelectTheDate { ...selectTheDateProps } />
+          <div className="container">
+            <div className="column-left">
+              <SelectTheDate { ...selectTheDateProps } />
+            </div>
+            <div className="middle-column">
+              <SelectTheCurrency { ...selectedCurrenciesProps }/>
+            </div>
+            <ControlledButtons {...selectedControlledButtonsProps}/>
           </div>
-          <div className="column-right">
-            <SelectTheCurrency { ...selectedCurrenciesProps }/>
+          <div className="second-container">
+              <div className="list">
+                {this.renderData()}
+              </div>
           </div>
-          {this.renderData()}
-        </div>
       </div>
     );
   }

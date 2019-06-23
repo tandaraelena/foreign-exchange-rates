@@ -12,19 +12,16 @@ const StyledDateSelector = styled.div`
 const SelectTheDate = ({ selectedDate, showCalendar, date, toggleShowCalendar, handleChangeCalendar }) => {
   return (
     <Paper>
-      <Typography variant="h5" component="h3">Select the date</Typography>
-      <Typography variant="h5" component="div">
-        
         <StyledDateSelector>
           <InputBase
-            placeholder='Click the calendar icon'
+            style={{paddingLeft:"0.6rem"}}
+            placeholder='Select the date'
             value={selectedDate}
           />
           <IconButton onClick={toggleShowCalendar}>
             <CalendarTodayIcon/>
           </IconButton>
         </StyledDateSelector>
-      </Typography>
       {showCalendar && <Calendar
         onChange={handleChangeCalendar}
         value={date}
